@@ -1,14 +1,22 @@
 import React from 'react';
-import {Header, Left, Body, Right, Title} from 'native-base';
+import { Header, Left, Body, Right, Title, Button, Icon } from 'native-base';
 
 const AppHeader = () => {
   return (
     <Header>
-      <Left />
+      <Left>
+        <Button transparent>
+          <Icon name="arrow-back" />
+        </Button>
+      </Left>
       <Body>
         <Title>Header</Title>
       </Body>
-      <Right />
+      <Right>
+        <Button transparent>
+          <Icon name="menu" />
+        </Button>
+      </Right>
     </Header>
   );
 };
