@@ -1,12 +1,14 @@
 import React from 'react';
 import {Container} from 'native-base';
 import AppHeader from './components/header';
+import Navigator from './routes/homeStack';
 
 const HelloWorldApp = () => {
   return (
-    <Container>
-      <AppHeader />
-    </Container>
+    <Navigator />
+    // <Container>
+    //   <AppHeader />
+    // </Container>
   );
 };
 
