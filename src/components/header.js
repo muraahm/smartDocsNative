@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Left, Body, Right, Title, Button, Icon } from 'native-base';
+import {Header, Left, Body, Right, Title, Button, Icon} from 'native-base';
 
 const AppHeader = () => {
   return (
