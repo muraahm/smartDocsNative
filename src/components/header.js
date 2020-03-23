@@ -1,22 +1,22 @@
 import React from 'react';
-import {Header, Left, Body, Right, Title, Button, Icon} from 'native-base';
+import {Header, Left, Body, Right, Button, Icon, Title} from 'native-base';
 
-const AppHeader = () => {
+const AppHeader = ({title, navigation}) => {
+  const openMenu = () => {
+    navigation.openDrawer();
+  };
+
   return (
     <Header>
       <Left>
         <Button transparent>
-          <Icon name="arrow-back" />
+          <Icon name="menu" onPress={openMenu} />
         </Button>
       </Left>
       <Body>
-        <Title>Header</Title>
+        <Title>{title}</Title>
       </Body>
-      <Right>
-        <Button transparent>
-          <Icon name="menu" />
-        </Button>
-      </Right>
+      <Right />
     </Header>
   );
 };
