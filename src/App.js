@@ -6,10 +6,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 // AsyncStorage.setItem('token', '123456');
 // const value = AsyncStorage.getItem('token');
-// console.log(value);
+// console.log(value); 
+const loggedin = false;
 
 const App = () => {
-  const loggedin = true;
+
   return (
     <Container>
       {!loggedin && <Auth />}
