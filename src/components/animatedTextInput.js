@@ -1,18 +1,21 @@
 import React from 'react';
 import { Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { TapGestureHandler, TextInput } from 'react-native-gesture-handler';
+import { TapGestureHandler, TextInput, State } from 'react-native-gesture-handler';
 
 const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
 
-  const auth = () => {
-    if (props.buttonAction === "SIGN IN") {
-      console.log('signin')
-    }
-    if (props.buttonAction === "REGISTER") {
-      console.log('REGISTER')
+  const auth = ({ nativeEvent }) => {
+    if (nativeEvent.state === State.END) {
+
+      if (props.buttonAction === "SIGN IN") {
+        console.log('signin')
+      }
+      if (props.buttonAction === "REGISTER") {
+        console.log('REGISTER')
+      }
     }
   }
 
@@ -42,9 +45,9 @@ const AnimatedTextInput = (props) => {
         placeholderTextColor="black"
       />
       <TapGestureHandler onHandlerStateChange={auth} >
-      <Animated.View style={styles.button}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
-      </Animated.View>
+        <Animated.View style={styles.button}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
+        </Animated.View>
       </TapGestureHandler>
     </Animated.View>
   )
