@@ -1,5 +1,13 @@
-import React, { useContext } from 'react';
-import { Text, StyleSheet, Dimensions, TextInput } from 'react-native';
+import React, { useContext, useState } from 'react';
+import {
+  Text,
+  StyleSheet,
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  Keyboard
+} from 'react-native';
+import { Container, Header, Content, Form, Item, Input } from 'native-base';
 import Animated from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import { AppContext } from '../contexts/appContext';
@@ -8,21 +16,42 @@ const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
 
-  const { login, register, state } = useContext(AppContext)
+  const { login, register } = useContext(AppContext)
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const nameTextInput = React.createRef();
+  const emailTextInput = React.createRef();
+  const passwordTextInput = React.createRef();
   const auth = ({ nativeEvent }) => {
     if (nativeEvent.state === State.END) {
 
       if (props.buttonAction === "SIGN IN") {
-        console.log('signin')
+        login(email, password)
       }
       if (props.buttonAction === "REGISTER") {
-        console.log('REGISTER')
+        register(name, email, password)
+        nameTextInput.current.clear()
       }
+      emailTextInput.current.clear()
+      passwordTextInput.current.clear()
     }
   }
 
+
+  const close = () => {
+    if (props.buttonAction === "REGISTER") {
+      nameTextInput.current.clear()
+    }
+    emailTextInput.current.clear()
+    passwordTextInput.current.clear()
+    Keyboard.dismiss()
+  };
+
   return (
+
     <Animated.View style={{
       zIndex: props.textInputZindex,
       opacity: props.textInputOpacity,
@@ -33,9 +62,15 @@ const AnimatedTextInput = (props) => {
       justifyContent: 'center'
     }}>
       <TapGestureHandler onHandlerStateChange={props.onCloseX} >
+
         <Animated.View style={styles.closeButton} >
-          <Animated.Text style={{ fontSize: 15 }}>X</Animated.Text>
+          <TouchableOpacity
+            style={styles.touchableOpacity}
+            onPress={() => close()}>
+            <Text style={{ fontSize: 15 }}>X</Text>
+          </TouchableOpacity>
         </Animated.View>
+
       </TapGestureHandler>
       {props.buttonAction === "REGISTER" &&
         (
@@ -43,7 +78,12 @@ const AnimatedTextInput = (props) => {
             placeholder="NAME"
             style={styles.textInput}
             placeholderTextColor="black"
-            keyboardType="email-address"
+            keyboardType="default"
+            onChangeText={name => setName(name)}
+            autoCompleteType="name"
+            textContentType="name"
+            clearButtonMode="always"
+            ref={nameTextInput}
           />
         )}
 
@@ -52,12 +92,24 @@ const AnimatedTextInput = (props) => {
         style={styles.textInput}
         placeholderTextColor="black"
         keyboardType="email-address"
+        onChangeText={email => setEmail(email)}
+        autoCompleteType="email"
+        textContentType="emailAddress"
+        clearButtonMode="always"
+        ref={emailTextInput}
       />
+
       <TextInput
         placeholder="PASSWORD"
         style={styles.textInput}
         placeholderTextColor="black"
         keyboardType="ascii-capable"
+        onChangeText={password => setPassword(password)}
+        autoCompleteType="password"
+        textContentType="password"
+        secureTextEntry={true}
+        clearButtonMode="always"
+        ref={passwordTextInput}
       />
       <TapGestureHandler onHandlerStateChange={auth} >
         <Animated.View style={styles.button}>
@@ -65,6 +117,7 @@ const AnimatedTextInput = (props) => {
         </Animated.View>
       </TapGestureHandler>
     </Animated.View>
+
   )
 }
 
@@ -103,6 +156,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 },
     shadowColor: 'black',
     shadowOpacity: 0.2,
+  },
+  touchableOpacity: {
+    height: 40,
+    width: 100,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
