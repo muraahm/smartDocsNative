@@ -50,13 +50,14 @@ const runTiming = (clock, value, dest) => {
   ]);
 }
 const buttonOpacity = new Value(1);
+
 const onStateChange = event([
   {
     nativeEvent: ({ state }) =>
       block([
         cond(
           eq(state, State.END),
-          set(buttonOpacity, runTiming(new Clock(), 1, 0))
+          set(buttonOpacity, runTiming(new Clock(), 1, 0)),
         )
       ])
   }
@@ -140,6 +141,7 @@ const Auth = () => {
               >SIGN IN</Text>
             </TouchableOpacity>
           </Animated.View>
+
         </TapGestureHandler>
         <TapGestureHandler onHandlerStateChange={onStateChange}>
           <Animated.View
