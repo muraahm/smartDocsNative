@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Keyboard, 
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import AnimatedTextInput from './animatedTextInput'
+
 const { width, height } = Dimensions.get('window');
 const {
   Value,

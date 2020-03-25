@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, StyleSheet, Dimensions, TextInput } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import { AppContext } from '../contexts/appContext';
 
 const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
 
+  const {login, register, state} = useContext(AppContext)
+
   const auth = ({ nativeEvent }) => {
     if (nativeEvent.state === State.END) {
 
       if (props.buttonAction === "SIGN IN") {
+        login()
         console.log('signin')
       }
       if (props.buttonAction === "REGISTER") {
