@@ -8,13 +8,12 @@ const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
 
-  const {login, register, state} = useContext(AppContext)
+  const { login, register, state } = useContext(AppContext)
 
   const auth = ({ nativeEvent }) => {
     if (nativeEvent.state === State.END) {
 
       if (props.buttonAction === "SIGN IN") {
-        login()
         console.log('signin')
       }
       if (props.buttonAction === "REGISTER") {
@@ -38,6 +37,16 @@ const AnimatedTextInput = (props) => {
           <Animated.Text style={{ fontSize: 15 }}>X</Animated.Text>
         </Animated.View>
       </TapGestureHandler>
+      {props.buttonAction === "REGISTER" &&
+        (
+          <TextInput
+            placeholder="NAME"
+            style={styles.textInput}
+            placeholderTextColor="black"
+            keyboardType="email-address"
+          />
+        )}
+
       <TextInput
         placeholder="EMAIL"
         style={styles.textInput}
