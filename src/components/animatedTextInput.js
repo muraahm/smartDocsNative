@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, Dimensions, TextInput } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { TapGestureHandler, TextInput, State } from 'react-native-gesture-handler';
+import { TapGestureHandler, State } from 'react-native-gesture-handler';
 
 const { height, width } = Dimensions.get('window');
 
@@ -38,11 +38,13 @@ const AnimatedTextInput = (props) => {
         placeholder="EMAIL"
         style={styles.textInput}
         placeholderTextColor="black"
+        keyboardType="email-address"
       />
       <TextInput
         placeholder="PASSWORD"
         style={styles.textInput}
         placeholderTextColor="black"
+        keyboardType="ascii-capable"
       />
       <TapGestureHandler onHandlerStateChange={auth} >
         <Animated.View style={styles.button}>

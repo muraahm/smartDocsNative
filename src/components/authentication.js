@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import AnimatedTextInput from './animatedTextInput'
@@ -107,11 +107,13 @@ const Auth = () => {
   const [buttonAction, setButtonAction] = useState('');
 
   return (
+    
     <View style={{
       flex: 1,
       backgroundColor: 'white',
       justifyContent: 'flex-end'
     }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <Animated.View
         style={{
           ...StyleSheet.absoluteFill,
@@ -123,6 +125,7 @@ const Auth = () => {
           style={{ flex: 1, height: null, width: null }}
         />
       </Animated.View>
+      </TouchableWithoutFeedback>
       <View style={{ height: height / 3, justifyContent: 'center' }}>
         <TapGestureHandler onHandlerStateChange={onStateChange} >
 
