@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import AnimatedTextInput from './animatedTextInput'
@@ -108,7 +108,10 @@ const Auth = () => {
   const [buttonAction, setButtonAction] = useState('');
 
   return (
-    
+    <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : null}
+                style={{ flex: 1 }}
+            >
     <View style={{
       flex: 1,
       backgroundColor: 'white',
@@ -174,6 +177,7 @@ const Auth = () => {
         />
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 
