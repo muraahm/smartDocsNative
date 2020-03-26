@@ -109,74 +109,74 @@ const Auth = () => {
 
   return (
     <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : null}
-                style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      style={{ flex: 1 }}
+    >
+      <View style={{
+        flex: 1,
+        backgroundColor: 'white',
+        justifyContent: 'flex-end'
+      }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <Animated.View
+            style={{
+              ...StyleSheet.absoluteFill,
+              transform: [{ translateY: bgY }]
+            }}
+          >
+            <Image
+              source={require('../assets/login.png')}
+              style={{ flex: 1, height: null, width: null }}
+            />
+          </Animated.View>
+        </TouchableWithoutFeedback>
+        <View style={{ height: height / 3, justifyContent: 'center' }}>
+          <TapGestureHandler onHandlerStateChange={onStateChange} >
+
+            <Animated.View
+              style={{
+                ...styles.button,
+                opacity: buttonOpacity,
+                transform: [{ translateY: buttonY }]
+              }}
             >
-    <View style={{
-      flex: 1,
-      backgroundColor: 'white',
-      justifyContent: 'flex-end'
-    }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Animated.View
-        style={{
-          ...StyleSheet.absoluteFill,
-          transform: [{ translateY: bgY }]
-        }}
-      >
-        <Image
-          source={require('../assets/login.png')}
-          style={{ flex: 1, height: null, width: null }}
-        />
-      </Animated.View>
-      </TouchableWithoutFeedback>
-      <View style={{ height: height / 3, justifyContent: 'center' }}>
-        <TapGestureHandler onHandlerStateChange={onStateChange} >
+              <TouchableOpacity
+                style={styles.touchableOpacity}
+                onPress={() => setButtonAction('SIGN IN')}>
+                <Text
+                  style={{ fontSize: 20, fontWeight: 'bold' }}
+                >SIGN IN</Text>
+              </TouchableOpacity>
+            </Animated.View>
 
-          <Animated.View
-            style={{
-              ...styles.button,
-              opacity: buttonOpacity,
-              transform: [{ translateY: buttonY }]
-            }}
-          >
-            <TouchableOpacity
-              style={styles.touchableOpacity}
-              onPress={() => setButtonAction('SIGN IN')}>
-              <Text
-                style={{ fontSize: 20, fontWeight: 'bold' }}
-              >SIGN IN</Text>
-            </TouchableOpacity>
-          </Animated.View>
-
-        </TapGestureHandler>
-        <TapGestureHandler onHandlerStateChange={onStateChange}>
-          <Animated.View
-            style={{
-              ...styles.button,
-              backgroundColor: 'black',
-              opacity: buttonOpacity,
-              transform: [{ translateY: buttonY }]
-            }}
-          >
-            <TouchableOpacity
-              style={styles.touchableOpacity}
-              onPress={() => setButtonAction('REGISTER')}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
-                REGISTER
+          </TapGestureHandler>
+          <TapGestureHandler onHandlerStateChange={onStateChange}>
+            <Animated.View
+              style={{
+                ...styles.button,
+                backgroundColor: 'black',
+                opacity: buttonOpacity,
+                transform: [{ translateY: buttonY }]
+              }}
+            >
+              <TouchableOpacity
+                style={styles.touchableOpacity}
+                onPress={() => setButtonAction('REGISTER')}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+                  REGISTER
             </Text>
-            </TouchableOpacity>
-          </Animated.View>
-        </TapGestureHandler>
-        <AnimatedTextInput
-          textInputZindex={textInputZindex}
-          textInputY={textInputY}
-          textInputOpacity={textInputOpacity}
-          onCloseX={onCloseX}
-          buttonAction={buttonAction}
-        />
+              </TouchableOpacity>
+            </Animated.View>
+          </TapGestureHandler>
+          <AnimatedTextInput
+            textInputZindex={textInputZindex}
+            textInputY={textInputY}
+            textInputOpacity={textInputOpacity}
+            onCloseX={onCloseX}
+            buttonAction={buttonAction}
+          />
+        </View>
       </View>
-    </View>
     </KeyboardAvoidingView>
   );
 };
