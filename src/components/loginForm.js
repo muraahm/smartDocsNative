@@ -1,36 +1,36 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Form, Input } from 'native-base';
-
-
+import { Form, Input, Item } from 'native-base';
 
 const LoginForm = (props) => {
 
   return (
     <Form style={styles.form}>
-      <Input
-        style={styles.textInput}
-        placeholder="EMAIL"
-        placeholderTextColor="black"
-        keyboardType="email-address"
-        onChangeText={email => props.setEmail(email)}
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        clearButtonMode="always"
-        value={props.email}
-      />
-      <Input
-        style={styles.textInput}
-        placeholder="PASSWORD"
-        placeholderTextColor="black"
-        keyboardType="ascii-capable"
-        onChangeText={password => props.setPassword(password)}
-        autoCompleteType="password"
-        textContentType="password"
-        secureTextEntry={true}
-        clearButtonMode="always"
-        value={props.password}
-      />
+      <Item >
+        <Input
+          placeholder="EMAIL"
+          placeholderTextColor="black"
+          keyboardType="email-address"
+          onChangeText={email => props.setEmail(email)}
+          autoCompleteType="email"
+          textContentType="emailAddress"
+          clearButtonMode="always"
+          value={props.email}
+        />
+      </Item>
+      <Item >
+        <Input
+          placeholder="PASSWORD"
+          placeholderTextColor="black"
+          keyboardType="ascii-capable"
+          onChangeText={password => props.setPassword(password)}
+          autoCompleteType="password"
+          textContentType="password"
+          secureTextEntry={true}
+          clearButtonMode="always"
+          value={props.password}
+        />
+      </Item>
     </Form>
   );
 }
@@ -46,7 +46,16 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
   },
   form: {
-    height: 120,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    paddingLeft: 10,
+    paddingRight: 28,
+  },
+  error: {
+    color: "red",
+    marginVertical: 5,
+    marginHorizontal: 20,
+    paddingRight: 28,
   }
 })
 
