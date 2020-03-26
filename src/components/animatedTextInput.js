@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Text, StyleSheet, Dimensions, TouchableOpacity, Keyboard } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import { StyleSheet, Dimensions, TouchableOpacity, ScrollView, Keyboard, SafeAreaView } from 'react-native';
+import { Text, Content } from 'native-base';
 import { AppContext } from '../contexts/appContext';
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
@@ -15,22 +16,57 @@ const AnimatedTextInput = (props) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(true);
+  const [error, setError] = useState({ name: false, email: false, password: false });
+
+  // regex patterns
+  const patterns = {
+    name: /^[a-zA-Z ]+$/,
+    email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    password: /^[\d\w@-]{8,20}$/i,
+  };
 
   const auth = ({ nativeEvent }) => {
-    if (nativeEvent.state === State.END && error === false) {
+    if (nativeEvent.state === State.END) {
+
+      //handle login API call
       if (props.buttonAction === "SIGN IN") {
-        console.log('login')
-        // login(email, password)
-      }
+        login(email, password)
+          .then(() => {
+            setEmail('')
+            setPassword('')
+          })
+          .catch((e) => {
+            console.log("Error:", e)
+          })
+      };
+
+      // handle register API call
       if (props.buttonAction === "REGISTER") {
-        console.log('register')
-        // register(name, email, password)
-      }
-      setName('')
-      setEmail('')
-      setPassword('')
-    }
+        if ( //if passes regex tests
+          patterns.name.test(name) &&
+          patterns.email.test(email) &&
+          patterns.password.test(password)
+        ) {
+          register(name, email, password)
+            .then(() => {
+              setName('')
+              setEmail('')
+              setPassword('')
+              setError({ ...error, name: false, email: false, password: false })
+            })
+            .catch((e) => {
+              console.log("Error:", e)
+            });
+        }
+        else { // if didn't pass regex tests
+          setError({
+            name: !patterns.name.test(name),
+            email: !patterns.email.test(email),
+            password: !patterns.password.test(password)
+          });
+        };
+      };
+    };
   };
 
 
@@ -38,6 +74,7 @@ const AnimatedTextInput = (props) => {
     setName('')
     setEmail('')
     setPassword('')
+    setError({ ...error, name: false, email: false, password: false })
     Keyboard.dismiss()
   };
 
@@ -60,25 +97,27 @@ const AnimatedTextInput = (props) => {
           </TouchableOpacity>
         </Animated.View>
       </TapGestureHandler>
-
-      {props.buttonAction === "REGISTER" && (
-        <RegisterForm
-          name={name}
-          email={email}
-          password={password}
-          setName={setName}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          setError={setError}>
-        </RegisterForm>)}
-      {props.buttonAction === "SIGN IN" && (
-        <LoginForm
-          email={email}
-          password={password}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          setError={setError}>
-        </LoginForm>)}
+      <ScrollView>
+        {props.buttonAction === "REGISTER" && (
+          <RegisterForm
+            name={name}
+            email={email}
+            password={password}
+            error={error}
+            setName={setName}
+            setEmail={setEmail}
+            setPassword={setPassword}>
+          </RegisterForm>
+        )}
+        {props.buttonAction === "SIGN IN" && (
+          <LoginForm
+            email={email}
+            password={password}
+            error={error}
+            setEmail={setEmail}
+            setPassword={setPassword}>
+          </LoginForm>)}
+      </ScrollView>
 
       <TapGestureHandler onHandlerStateChange={auth}>
         <Animated.View style={styles.button}>
@@ -103,6 +142,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2
   },
   closeButton: {
+    zIndex: 1000,
     height: 40,
     width: 100,
     backgroundColor: 'white',
