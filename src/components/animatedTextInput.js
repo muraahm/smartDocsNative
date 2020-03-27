@@ -1,43 +1,28 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Animated from 'react-native-reanimated';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { StyleSheet, Dimensions, Keyboard } from 'react-native';
 import { Text, Content, Button } from 'native-base';
-import { AppContext } from '../contexts/appContext';
+import { AuthContext } from '../contexts/authContext';
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
-import { authHelperFunction } from '../helpers/authHelperFunction'
 
 //import screen diamensions to control view and animation
 const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
 
-  //destructure values from the app context
-  const { login, register, loggedin } = useContext(AppContext)
-
-  //form and error values
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState({ name: false, email: false, password: false });
-
-  const auth = ({ nativeEvent }) => {
-    authHelperFunction(
-      nativeEvent,
-      props.buttonAction,
-      email,
-      password,
-      login,
-      register,
-      loggedin,
-      setEmail,
-      setPassword,
-      name,
-      setName,
-      error,
-      setError)
-  };
+  //destructure values from the auth context
+  const {
+    name,
+    email,
+    password,
+    error,
+    setName,
+    setEmail,
+    setPassword,
+    setError,
+    authHelperFunction } = useContext(AuthContext)
 
   //clear form and dismiss keyboard if close the form view
   const close = () => {
@@ -92,7 +77,7 @@ const AnimatedTextInput = (props) => {
         </Content>
       </Animated.View>
 
-      <TapGestureHandler onHandlerStateChange={auth}>
+      <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}>
         <Animated.View style={styles.button}>
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
         </Animated.View>
