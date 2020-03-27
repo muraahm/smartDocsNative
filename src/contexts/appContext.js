@@ -7,7 +7,8 @@ import {
   SET_USER_CATEGORIES,
   SET_ACCOUNTANTS,
   SET_APP_DATA,
-  SET_USER_RECIEPTS
+  SET_USER_RECIEPTS,
+  LOGGEDIN
 } from "../reducer/application";
 
 export const AppContext = createContext();
@@ -20,7 +21,8 @@ const AppContextProvider = (props) => {
       userInfo: {},
       userCategories: [],
       accountants: [],
-      userReciepts: []
+      userReciepts: [],
+      loggedin: false
     }
   );
 
@@ -107,18 +109,24 @@ const AppContextProvider = (props) => {
         dispatch({ type: SET_USER_RECIEPTS, value: userReciepts });
       })
   };
-  
+
+  const loggedin = (value) => {
+    dispatch({ type: LOGGEDIN, value: value });
+  };
+
   return (
     <AppContext.Provider value={
-      {state,
-      dispatch,
-      login,
-      register,
-      logout,
-      createCategory,
-      listUserCategories,
-      getReceipts
-    }}>
+      {
+        state,
+        dispatch,
+        login,
+        register,
+        logout,
+        createCategory,
+        listUserCategories,
+        getReceipts,
+        loggedin
+      }}>
       {props.children}
     </AppContext.Provider>
   )
