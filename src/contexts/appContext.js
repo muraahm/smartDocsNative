@@ -110,6 +110,7 @@ const AppContextProvider = (props) => {
       })
   };
 
+  //handle component views
   const loggedin = (value) => {
     dispatch({ type: LOGGEDIN, value: value });
   };
