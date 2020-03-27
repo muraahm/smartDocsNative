@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
   },
   form: {
+    // height:2,
     marginVertical: 5,
     marginHorizontal: 20,
     paddingLeft: 10,
