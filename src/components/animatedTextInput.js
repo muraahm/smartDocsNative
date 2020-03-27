@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
 
-  const { login, register } = useContext(AppContext)
+  const { login, register, state, loggedin } = useContext(AppContext)
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ const AnimatedTextInput = (props) => {
     email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     password: /^[\d\w@-]{8,20}$/i,
   };
-
+  console.log({ ...state, loggedin: true })
   const auth = ({ nativeEvent }) => {
     if (nativeEvent.state === State.END) {
 
@@ -32,8 +32,14 @@ const AnimatedTextInput = (props) => {
       if (props.buttonAction === "SIGN IN") {
         login(email, password)
           .then(() => {
-            setEmail('')
-            setPassword('')
+            loggedin("loading");
+          })
+          .then(() => {
+            setTimeout(() => {
+              loggedin(true);
+              setEmail('');
+              setPassword('');
+            }, 6000);
           })
           .catch((e) => {
             console.log("Error:", e)
@@ -49,10 +55,16 @@ const AnimatedTextInput = (props) => {
         ) {
           register(name, email, password)
             .then(() => {
-              setName('')
-              setEmail('')
-              setPassword('')
-              setError({ ...error, name: false, email: false, password: false })
+              loggedin("loading");
+            })
+            .then(() => {
+              setTimeout(() => {
+                loggedin(true);
+                setName('');
+                setEmail('');
+                setPassword('');
+                setError({ ...error, name: false, email: false, password: false });
+              }, 6000);
             })
             .catch((e) => {
               console.log("Error:", e)
@@ -97,27 +109,29 @@ const AnimatedTextInput = (props) => {
           </TouchableOpacity>
         </Animated.View>
       </TapGestureHandler>
-      <ScrollView>
-        {props.buttonAction === "REGISTER" && (
-          <RegisterForm
-            name={name}
-            email={email}
-            password={password}
-            error={error}
-            setName={setName}
-            setEmail={setEmail}
-            setPassword={setPassword}>
-          </RegisterForm>
-        )}
-        {props.buttonAction === "SIGN IN" && (
-          <LoginForm
-            email={email}
-            password={password}
-            error={error}
-            setEmail={setEmail}
-            setPassword={setPassword}>
-          </LoginForm>)}
-      </ScrollView>
+      <Animated.View style={styles.scrollView}>
+        <ScrollView>
+          {props.buttonAction === "REGISTER" && (
+            <RegisterForm
+              name={name}
+              email={email}
+              password={password}
+              error={error}
+              setName={setName}
+              setEmail={setEmail}
+              setPassword={setPassword}>
+            </RegisterForm>
+          )}
+          {props.buttonAction === "SIGN IN" && (
+            <LoginForm
+              email={email}
+              password={password}
+              error={error}
+              setEmail={setEmail}
+              setPassword={setPassword}>
+            </LoginForm>)}
+        </ScrollView>
+      </Animated.View>
 
       <TapGestureHandler onHandlerStateChange={auth}>
         <Animated.View style={styles.button}>
@@ -163,6 +177,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  scrollView: {
+    height: 160
+  }
 });
 
 export default AnimatedTextInput;
