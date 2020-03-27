@@ -3,6 +3,7 @@ const SET_USER_CATEGORIES = "SET_USER_CATEGORIES"
 const SET_ACCOUNTANTS = "SET_ACCOUNTANTS"
 const SET_APP_DATA = "SET_APP_DATA"
 const SET_USER_RECIEPTS = "SET_USER_RECIEPTS"
+const LOGGEDIN = "LOGGEDIN"
 
 function reducer(state, action) {
 
@@ -27,6 +28,8 @@ function reducer(state, action) {
         userCategories: action.value.userCategories,
         accountants: action.value.accountants
       }
+      case LOGGEDIN:
+      return { ...state, loggedin: action.value }
 
 
     default:
@@ -42,5 +45,6 @@ export {
   SET_USER_CATEGORIES,
   SET_ACCOUNTANTS,
   SET_APP_DATA,
-  SET_USER_RECIEPTS
+  SET_USER_RECIEPTS,
+  LOGGEDIN
 };
