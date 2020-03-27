@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Form, Input, Item } from 'native-base';
+import { Form, Input, Item, Text } from 'native-base';
 
 const LoginForm = (props) => {
 
   return (
     <Form style={styles.form}>
-      <Item >
+      <Item error={props.error.email}>
         <Input
           placeholder="EMAIL"
           placeholderTextColor="black"
@@ -18,7 +18,8 @@ const LoginForm = (props) => {
           value={props.email}
         />
       </Item>
-      <Item >
+      {props.error.email ? <Text style={styles.error}>Email field cannot be empty*</Text> : <Text />}
+      <Item error={props.error.password}>
         <Input
           placeholder="PASSWORD"
           placeholderTextColor="black"
@@ -31,6 +32,7 @@ const LoginForm = (props) => {
           value={props.password}
         />
       </Item>
+      {props.error.password ? <Text style={styles.error}>Password field cannot be empty*</Text> : <Text />}
     </Form>
   );
 }
