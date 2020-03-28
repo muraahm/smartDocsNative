@@ -18,7 +18,7 @@ const LoginForm = (props) => {
           value={props.email}
         />
       </Item>
-      {props.error.email ? <Text style={styles.error}>Email field cannot be empty*</Text> : <Text />}
+      {props.error.email ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
       <Item error={props.error.password}>
         <Input
           placeholder="PASSWORD"
