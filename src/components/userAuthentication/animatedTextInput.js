@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { StyleSheet, Dimensions, Keyboard } from 'react-native';
 import { Text, Content, Button } from 'native-base';
-import { AuthContext } from '../contexts/authContext';
+import { AuthContext } from '../../contexts/authContext';
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
 
@@ -22,7 +22,7 @@ const AnimatedTextInput = (props) => {
     setEmail,
     setPassword,
     setError,
-    authHelperFunction } = useContext(AuthContext)
+    authHelperFunction } = useContext(AuthContext);
     
   //clear form and dismiss keyboard if close the form view
   const close = () => {

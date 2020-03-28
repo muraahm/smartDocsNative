@@ -135,7 +135,7 @@ const Auth = () => {
             }}
           >
             <Image
-              source={require('../assets/login.png')}
+              source={require('../../assets/login.png')}
               style={{ flex: 1, height: null, width: null }}
             />
           </Animated.View>

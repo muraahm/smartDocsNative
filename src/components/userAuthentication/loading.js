@@ -46,7 +46,7 @@ const Loading = () => {
   return (
     <React.Fragment>
       <Image
-        source={require('../assets/login.png')}
+        source={require('../../assets/login.png')}
         style={{ flex: 1, height: null, width: null, ...StyleSheet.absoluteFill }}
       />
       <Animated.View style={{ ...styles.container, transform: [{ scale }, { rotate }] }}>
