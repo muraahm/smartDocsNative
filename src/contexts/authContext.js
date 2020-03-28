@@ -23,7 +23,7 @@ const AuthContextProvider = (props) => {
   };
 
   const authHelperFunction = (nativeEvent, buttonAction) => {
-    console.log(patterns.loginPassword.test(password))
+
     if (nativeEvent.state === State.END) {
       //handle login API call
       if (buttonAction === "SIGN IN") {
@@ -39,7 +39,7 @@ const AuthContextProvider = (props) => {
                 setEmail('');
                 setPassword('');
                 setError({ ...error, name: false, email: false, password: false });
-              }, 6000);
+              }, 8000);
             })
             .catch((e) => {
               loggedin(false);
@@ -89,7 +89,7 @@ const AuthContextProvider = (props) => {
                 setEmail('');
                 setPassword('');
                 setError({ ...error, name: false, email: false, password: false });
-              }, 6000);
+              }, 8000);
             })
             .catch((e) => {
               loggedin(false);
