@@ -1,10 +1,14 @@
-import React from 'react';
-import {Header, Left, Body, Right, Button, Icon, Title} from 'native-base';
+import React, { useContext } from 'react';
+import { Header, Left, Body, Right, Button, Icon, Title, Text } from 'native-base';
+import { AppContext } from '../contexts/appContext';
 
-const AppHeader = ({title, navigation}) => {
+
+const AppHeader = ({ title, navigation }) => {
   const openMenu = () => {
     navigation.openDrawer();
   };
+
+  const { logout } = useContext(AppContext)
 
   return (
     <Header>
@@ -16,7 +20,11 @@ const AppHeader = ({title, navigation}) => {
       <Body>
         <Title>{title}</Title>
       </Body>
-      <Right />
+      <Right>
+        <Button transparent>
+          <Text onPress={logout}>LOG OUT</Text>
+        </Button>
+      </Right>
     </Header>
   );
 };
