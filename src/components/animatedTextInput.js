@@ -23,7 +23,7 @@ const AnimatedTextInput = (props) => {
     setPassword,
     setError,
     authHelperFunction } = useContext(AuthContext)
-
+    
   //clear form and dismiss keyboard if close the form view
   const close = () => {
     setName('')
