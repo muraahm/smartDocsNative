@@ -30,8 +30,6 @@ const AppContextProvider = (props) => {
   const login = (email, password) => {
     return axios.post(`${config.API_PATH}/api/login/`, { email, password })
       .then(response => {
-        if (response.data.meassage)
-          alert(response.data.meassage);
         const userInfo = response.data;
         //dispatch client info to the reducer
         dispatch({ type: SET_USER_INFO, value: userInfo });
@@ -57,8 +55,6 @@ const AppContextProvider = (props) => {
   const register = (name, email, password) => {
     return axios.put(`${config.API_PATH}/api/users/register`, { name, email, password })
       .then(response => {
-        if (response.data.meassage)
-          alert(response.data.meassage);
         const userInfo = response.data;
         dispatch({ type: SET_USER_INFO, value: userInfo });
       })
