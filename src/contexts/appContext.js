@@ -1,6 +1,7 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
-import config from '../config'
+import config from '../config';
 import {
   reducer,
   SET_USER_INFO,
@@ -10,6 +11,7 @@ import {
   SET_USER_RECIEPTS,
   LOGGEDIN
 } from "../reducer/application";
+
 
 export const AppContext = createContext();
 
@@ -26,10 +28,29 @@ const AppContextProvider = (props) => {
     }
   );
 
+  //get token value from storage
+  const getStorageData = async (data) => {
+    try {
+      const value = await AsyncStorage.getItem(data)
+      return value
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
+  const removeStorageData = async (data) => {
+    try {
+      await AsyncStorage.removeItem(data)
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
   //client login api call
   const login = (email, password) => {
     return axios.post(`${config.API_PATH}/api/login/`, { email, password })
       .then(response => {
+        AsyncStorage.setItem('token', response.data.token);
         const userInfo = response.data;
         //dispatch client info to the reducer
         dispatch({ type: SET_USER_INFO, value: userInfo });
@@ -55,6 +76,7 @@ const AppContextProvider = (props) => {
   const register = (name, email, password) => {
     return axios.put(`${config.API_PATH}/api/users/register`, { name, email, password })
       .then(response => {
+        AsyncStorage.setItem('token', response.data.token);
         const userInfo = response.data;
         dispatch({ type: SET_USER_INFO, value: userInfo });
       })
@@ -71,8 +93,8 @@ const AppContextProvider = (props) => {
   const logout = () => {
     const userInfo = {};
     const userCategories = [];
-    localStorage.removeItem("together::accountant")
-    localStorage.removeItem("together::token")
+    loggedin(false)
+    removeStorageData('token')
     dispatch({ type: SET_USER_INFO, value: userInfo });
     dispatch({ type: SET_USER_CATEGORIES, value: userCategories });
   };
@@ -111,6 +133,37 @@ const AppContextProvider = (props) => {
     dispatch({ type: LOGGEDIN, value: value });
   };
 
+  useEffect(
+    () => {
+
+      //get token from storage
+      getStorageData('token').then((token) => {
+
+        //use effect api call if client logged in
+        Promise.all([
+          axios.get(`${config.API_PATH}/api/accountants`),
+          axios.post(`${config.API_PATH}/api/user`, { token })
+        ])
+          .then((all) => {
+            loggedin(true)
+            dispatch({
+              type: SET_APP_DATA,
+              value: {
+                accountants: all[0].data,
+                userInfo: all[1].data.userInfo,
+                userCategories: all[1].data.categories
+              }
+
+            });
+          })
+          .catch(err => {
+            // console.log(err.response.status);
+            // console.log(err.response.headers);
+            // console.log(err.response.data);
+          });
+      })
+    }, []);
+
   return (
     <AppContext.Provider value={
       {
@@ -122,7 +175,8 @@ const AppContextProvider = (props) => {
         createCategory,
         listUserCategories,
         getReceipts,
-        loggedin
+        loggedin,
+        getStorageData
       }}>
       {props.children}
     </AppContext.Provider>
