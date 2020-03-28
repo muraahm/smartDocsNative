@@ -1,8 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import Animated, { Easing } from "react-native-reanimated";
 import { loop, bInterpolate } from 'react-native-redash';
-import { useMemoOne } from "use-memo-one";
 
 const {
   Value,
@@ -26,33 +25,36 @@ const Loading = () => {
   const clock = new Clock();
   const animation = new Value(0);
 
-  const offsetNode = useMemoOne(
-    () => set(
-      animation,
-      loop({
-        clock,
-        duration: 4000,
-        easing: Easing.inOut(Easing.ease),
-        boomerang: true,
-        autoStart: true
-      })
+  useCode(
+    () => (
+      set(
+        animation,
+        loop({
+          clock,
+          duration: 4000,
+          easing: Easing.inOut(Easing.ease),
+          boomerang: true,
+          autoStart: true
+        })
+      )
     ), []
   );
 
-  useCode(offsetNode);
+
+
   const scale = bInterpolate(animation, 0.4, 1);
   const rotate = bInterpolate(animation, 0, 2 * Math.PI * 5);
 
   return (
-    <React.Fragment>
+    <Fragment>
       <Image
         source={require('../../assets/login.png')}
-        style={{ flex: 1, height: null, width: null, ...StyleSheet.absoluteFill }}
+        style={styles.bgImage}
       />
       <Animated.View style={{ ...styles.container, transform: [{ scale }, { rotate }] }}>
         <Logo />
       </Animated.View>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
@@ -60,7 +62,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+  },
+  bgImage: {
+    ...StyleSheet.absoluteFill,
+    flex: 1,
+    height: null,
+    width: null
   },
   logoContainer: {
     width: 200,
