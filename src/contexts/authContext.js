@@ -1,13 +1,14 @@
 import React, { createContext, useState, useContext } from 'react';
+import { Alert } from 'react-native';
 import { State } from 'react-native-gesture-handler';
 import { AppContext } from '../contexts/appContext';
 
 export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
-  
+
   //destructure values from the app context
-  const { login, register, loggedin } = useContext(AppContext)
+  const { login, register, loggedin, state } = useContext(AppContext)
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,15 +19,15 @@ const AuthContextProvider = (props) => {
     name: /^[a-zA-Z ]+$/,
     email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     password: /^[\d\w@-]{8,20}$/i,
+    loginPassword: /^(?!\s*$).+/,
   };
 
   const authHelperFunction = (nativeEvent, buttonAction) => {
-
+    console.log(patterns.loginPassword.test(password))
     if (nativeEvent.state === State.END) {
       //handle login API call
       if (buttonAction === "SIGN IN") {
-        if (patterns.email.test(email) &&
-          patterns.password.test(password)) {
+        if (patterns.email.test(email) && patterns.loginPassword.test(password)) {
           login(email, password) // api call to server
             .then(() => {
               //enable animated loading view
@@ -34,7 +35,6 @@ const AuthContextProvider = (props) => {
             })
             .then(() => {
               setTimeout(() => {
-                //disable animated loading view
                 loggedin(true);
                 setEmail('');
                 setPassword('');
@@ -42,7 +42,19 @@ const AuthContextProvider = (props) => {
               }, 6000);
             })
             .catch((e) => {
-              console.log("Error:", e);
+              loggedin(false);
+              setError({ ...error, name: false, email: false, password: false });
+              Alert.alert(
+                "",
+                e.response.data.message,
+                [
+                  {
+                    text: "OK",
+                  }
+                ],
+                { cancelable: false }
+              );
+              console.log("Error:", e)
             })
         }
         else {
@@ -51,7 +63,7 @@ const AuthContextProvider = (props) => {
           setError({
             name: !patterns.name.test(name),
             email: !patterns.email.test(email),
-            password: !patterns.password.test(password)
+            password: !patterns.loginPassword.test(password)
           });
         };
 
@@ -80,8 +92,20 @@ const AuthContextProvider = (props) => {
               }, 6000);
             })
             .catch((e) => {
-              console.log("Error:", e);
-            });
+              loggedin(false);
+              setError({ ...error, name: false, email: false, password: false });
+              Alert.alert(
+                "",
+                e.response.data.message,
+                [
+                  {
+                    text: "OK",
+                  }
+                ],
+                { cancelable: false }
+              );
+              console.log("Error:", e)
+            })
         }
         else {
           // if didn't pass regex tests change error values to display error
