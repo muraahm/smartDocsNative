@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Form, Input, Item, Text } from 'native-base';
+import { AuthContext } from '../../contexts/authContext';
 
 
-const RegisterForm = (props) => {
+const RegisterForm = () => {
 
-  const form = props.form;
-  const name = props.form.name;
-  const email = props.form.email;
-  const password = props.form.password;
-  const nameError = props.form.error.name;
-  const emailError = props.form.error.email;
-  const passwordError = props.form.error.password;
+  const { form, setForm } = useContext(AuthContext);
+  const name = form.name;
+  const email = form.email;
+  const password = form.password;
+  const nameError = form.error.name;
+  const emailError = form.error.email;
+  const passwordError = form.error.password;
 
   return (
     <Form style={styles.form}>
@@ -20,7 +21,7 @@ const RegisterForm = (props) => {
           placeholder="NAME"
           placeholderTextColor="black"
           keyboardType="default"
-          onChangeText={name => props.setForm({ ...form, name })}
+          onChangeText={name => setForm({ ...form, name })}
           autoCompleteType="name"
           textContentType="name"
           clearButtonMode="always"
@@ -33,7 +34,7 @@ const RegisterForm = (props) => {
           placeholder="EMAIL"
           placeholderTextColor="black"
           keyboardType="email-address"
-          onChangeText={email => props.setForm({ ...form, email })}
+          onChangeText={email => setForm({ ...form, email })}
           autoCompleteType="email"
           textContentType="emailAddress"
           clearButtonMode="always"
@@ -46,7 +47,7 @@ const RegisterForm = (props) => {
           placeholder="PASSWORD"
           placeholderTextColor="black"
           keyboardType="ascii-capable"
-          onChangeText={password => props.setForm({ ...form, password })}
+          onChangeText={password => setForm({ ...form, password })}
           autoCompleteType="password"
           textContentType="password"
           secureTextEntry={true}

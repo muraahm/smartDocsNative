@@ -13,7 +13,7 @@ const { height, width } = Dimensions.get('window');
 const AnimatedTextInput = (props) => {
 
   //destructure values from the auth context
-  const { form, setForm, authHelperFunction } = useContext(AuthContext);
+  const { authHelperFunction } = useContext(AuthContext);
 
   return (
     <Animated.View style={{
@@ -34,10 +34,8 @@ const AnimatedTextInput = (props) => {
 
       <Animated.View style={styles.formContentView}>
         <Content enableAutomaticScroll={false}>
-          {props.buttonAction === "REGISTER" &&
-            <RegisterForm form={form} setForm={setForm} />}
-          {props.buttonAction === "SIGN IN" &&
-            <LoginForm form={form} setForm={setForm} />}
+          {props.buttonAction === "REGISTER" && <RegisterForm />}
+          {props.buttonAction === "SIGN IN" && <LoginForm />}
         </Content>
         <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}>
           <Animated.View style={styles.button}>

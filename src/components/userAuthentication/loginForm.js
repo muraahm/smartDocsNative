@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Form, Input, Item, Text } from 'native-base';
+import { AuthContext } from '../../contexts/authContext';
 
-const LoginForm = (props) => {
+const LoginForm = () => {
 
-  const form = props.form;
-  const email = props.form.email;
-  const password = props.form.password;
-  const emailError = props.form.error.email;
-  const passwordError = props.form.error.password;
+  const { form, setForm } = useContext(AuthContext);
+  const email = form.email;
+  const password = form.password;
+  const emailError = form.error.email;
+  const passwordError = form.error.password;
 
   return (
     <Form style={styles.form}>
@@ -17,7 +18,7 @@ const LoginForm = (props) => {
           placeholder="EMAIL"
           placeholderTextColor="black"
           keyboardType="email-address"
-          onChangeText={email => props.setForm({ ...form, email })}
+          onChangeText={email => setForm({ ...form, email })}
           autoCompleteType="email"
           textContentType="emailAddress"
           clearButtonMode="always"
@@ -30,7 +31,7 @@ const LoginForm = (props) => {
           placeholder="PASSWORD"
           placeholderTextColor="black"
           keyboardType="ascii-capable"
-          onChangeText={password => props.setForm({ ...form, password })}
+          onChangeText={password => setForm({ ...form, password })}
           autoCompleteType="password"
           textContentType="password"
           secureTextEntry={true}
