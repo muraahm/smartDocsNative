@@ -65,28 +65,49 @@ const runTiming = (clock, value, dest) => {
   ]);
 };
 
+const onStateChange = event([
+  {
+    nativeEvent: ({ state }) =>
+      block([
+        cond(
+          eq(state, State.END),
+          set(buttonOpacity, runTiming(new Clock(), 1, 0)),
+        )
+      ])
+  }
+]);
+
+const buttonY = interpolate(buttonOpacity, {
+  inputRange: [0, 1],
+  outputRange: [100, 0],
+  extrapolate: Extrapolate.CLAMP
+});
+const bgY = interpolate(buttonOpacity, {
+  inputRange: [0, 1],
+  outputRange: [-height / 3, 0],
+  extrapolate: Extrapolate.CLAMP
+});
+const textInputZindex = interpolate(buttonOpacity, {
+  inputRange: [0, 1],
+  outputRange: [1, -1],
+  extrapolate: Extrapolate.CLAMP
+});
+const textInputY = interpolate(buttonOpacity, {
+  inputRange: [0, 1],
+  outputRange: [0, 100],
+  extrapolate: Extrapolate.CLAMP
+});
+const textInputOpacity = interpolate(buttonOpacity, {
+  inputRange: [0, 1],
+  outputRange: [1, 0],
+  extrapolate: Extrapolate.CLAMP
+});
+
 
 const Authentication = () => {
 
-  const {
-    error,
-    setName,
-    setEmail,
-    setPassword,
-    setError } = useContext(AuthContext);
+  const { setForm } = useContext(AuthContext);
   const [buttonAction, setButtonAction] = useState('');
-
-  const onStateChange = event([
-    {
-      nativeEvent: ({ state }) =>
-        block([
-          cond(
-            eq(state, State.END),
-            set(buttonOpacity, runTiming(new Clock(), 1, 0)),
-          )
-        ])
-    }
-  ]);
 
   const onCloseX = event([{
     nativeEvent: {
@@ -102,10 +123,12 @@ const Authentication = () => {
               [state],
               () => {
                 //clear form and dismiss keyboard if close the form view
-                setName('')
-                setEmail('')
-                setPassword('')
-                setError({ ...error, name: false, email: false, password: false })
+                setForm({
+                  name: '',
+                  email: '',
+                  password: '',
+                  error: { name: false, email: false, password: false }
+                })
                 Keyboard.dismiss()
               }
             )
@@ -113,32 +136,6 @@ const Authentication = () => {
         ])
     }
   }]);
-
-  const buttonY = interpolate(buttonOpacity, {
-    inputRange: [0, 1],
-    outputRange: [100, 0],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const bgY = interpolate(buttonOpacity, {
-    inputRange: [0, 1],
-    outputRange: [-height / 3, 0],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const textInputZindex = interpolate(buttonOpacity, {
-    inputRange: [0, 1],
-    outputRange: [1, -1],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const textInputY = interpolate(buttonOpacity, {
-    inputRange: [0, 1],
-    outputRange: [0, 100],
-    extrapolate: Extrapolate.CLAMP
-  });
-  const textInputOpacity = interpolate(buttonOpacity, {
-    inputRange: [0, 1],
-    outputRange: [1, 0],
-    extrapolate: Extrapolate.CLAMP
-  });
 
   return (
     <KeyboardAvoidingView
