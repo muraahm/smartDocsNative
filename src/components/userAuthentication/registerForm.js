@@ -5,48 +5,56 @@ import { Form, Input, Item, Text } from 'native-base';
 
 const RegisterForm = (props) => {
 
+  const form = props.form;
+  const name = props.form.name;
+  const email = props.form.email;
+  const password = props.form.password;
+  const nameError = props.form.error.name;
+  const emailError = props.form.error.email;
+  const passwordError = props.form.error.password;
+
   return (
     <Form style={styles.form}>
-      <Item error={props.error.name} >
+      <Item error={nameError} >
         <Input
           placeholder="NAME"
           placeholderTextColor="black"
           keyboardType="default"
-          onChangeText={name => props.setName(name)}
+          onChangeText={name => props.setForm({ ...form, name })}
           autoCompleteType="name"
           textContentType="name"
           clearButtonMode="always"
-          value={props.name}
+          value={name}
         />
       </Item>
-      {props.error.name ? <Text style={styles.error}>Name field cannot be empty*</Text> : <Text />}
-      <Item error={props.error.email} >
+      {nameError ? <Text style={styles.error}>Name field cannot be empty*</Text> : <Text />}
+      <Item error={emailError} >
         <Input
           placeholder="EMAIL"
           placeholderTextColor="black"
           keyboardType="email-address"
-          onChangeText={email => props.setEmail(email)}
+          onChangeText={email => props.setForm({ ...form, email })}
           autoCompleteType="email"
           textContentType="emailAddress"
           clearButtonMode="always"
-          value={props.email}
+          value={email}
         />
       </Item>
-      {props.error.email ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
-      <Item error={props.error.password} >
+      {emailError ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
+      <Item error={passwordError} >
         <Input
           placeholder="PASSWORD"
           placeholderTextColor="black"
           keyboardType="ascii-capable"
-          onChangeText={password => props.setPassword(password)}
+          onChangeText={password => props.setForm({ ...form, password })}
           autoCompleteType="password"
           textContentType="password"
           secureTextEntry={true}
           clearButtonMode="always"
-          value={props.password}
+          value={password}
         />
       </Item>
-      {props.error.password ? <Text style={styles.error}>Password must alphanumeric (@, _ and - are also allowed) and be 8 - 20 characters*</Text> : <Text />}
+      {passwordError ? <Text style={styles.error}>Password must alphanumeric (@, _ and - are also allowed) and be 8 - 20 characters*</Text> : <Text />}
     </Form>
   );
 };
