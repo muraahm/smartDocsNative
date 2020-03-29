@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import Animated from 'react-native-reanimated';
 import { TapGestureHandler } from 'react-native-gesture-handler';
-import { StyleSheet, Dimensions, Keyboard } from 'react-native';
-import { Text, Content, Button } from 'native-base';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Text, Content } from 'native-base';
 import { AuthContext } from '../../contexts/authContext';
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
 
-//import screen diamensions to control view and animation
+//import screen dimensions to control view and animation
 const { height, width } = Dimensions.get('window');
 
 const AnimatedTextInput = (props) => {
@@ -21,17 +21,7 @@ const AnimatedTextInput = (props) => {
     setName,
     setEmail,
     setPassword,
-    setError,
     authHelperFunction } = useContext(AuthContext);
-    
-  //clear form and dismiss keyboard if close the form view
-  const close = () => {
-    setName('')
-    setEmail('')
-    setPassword('')
-    setError({ ...error, name: false, email: false, password: false })
-    Keyboard.dismiss()
-  };
 
   return (
     <Animated.View style={{
@@ -45,12 +35,7 @@ const AnimatedTextInput = (props) => {
     }}>
       <TapGestureHandler onHandlerStateChange={props.onCloseX} >
         <Animated.View style={styles.closeButton} >
-          <Button
-            transparent dark
-            style={styles.closeAnimatedButton}
-            onPress={() => close()}>
-            <Text style={{ fontSize: 15 }}>X</Text>
-          </Button>
+          <Text style={{ fontSize: 15 }}>X</Text>
         </Animated.View>
       </TapGestureHandler>
       <Animated.View style={styles.scrollView}>
@@ -77,7 +62,9 @@ const AnimatedTextInput = (props) => {
         </Content>
       </Animated.View>
 
-      <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}>
+      <TapGestureHandler
+        onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}
+      >
         <Animated.View style={styles.button}>
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
         </Animated.View>
@@ -113,15 +100,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 },
     shadowColor: 'black',
     shadowOpacity: 0.2,
-  },
-  closeAnimatedButton: {
-    backgroundColor: 'white',
-    color: 'black',
-    height: 40,
-    width: 100,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   scrollView: {
     height: 160
