@@ -8,11 +8,14 @@ export const AuthContext = createContext();
 const AuthContextProvider = (props) => {
 
   //destructure values from the app context
-  const { login, register, loggedin, state } = useContext(AppContext)
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState({ name: false, email: false, password: false });
+  const { login, register, loggedin } = useContext(AppContext)
+
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    error: { name: false, email: false, password: false }
+  });
 
   // regex patterns
   const patterns = {
@@ -27,8 +30,8 @@ const AuthContextProvider = (props) => {
     if (nativeEvent.state === State.END) {
       //handle login API call
       if (buttonAction === "SIGN IN") {
-        if (patterns.email.test(email) && patterns.loginPassword.test(password)) {
-          login(email, password) // api call to server
+        if (patterns.email.test(form.email) && patterns.loginPassword.test(form.password)) {
+          login(form.email, form.password) // api call to server
             .then(() => {
               //enable animated loading view
               loggedin("loading");
@@ -36,14 +39,20 @@ const AuthContextProvider = (props) => {
             .then(() => {
               setTimeout(() => {
                 loggedin(true);
-                setEmail('');
-                setPassword('');
-                setError({ ...error, name: false, email: false, password: false });
+                setForm({
+                  name: '',
+                  email: '',
+                  password: '',
+                  error: { name: false, email: false, password: false }
+                })
               }, 8000);
             })
             .catch((e) => {
               loggedin(false);
-              setError({ ...error, name: false, email: false, password: false });
+              setForm({
+                ...form,
+                error: { name: false, email: false, password: false }
+              })
               Alert.alert(
                 "",
                 e.response.data.message,
@@ -60,11 +69,14 @@ const AuthContextProvider = (props) => {
         else {
           // if didn't pass regex tests change error values to display error
           // and prevent form from submitting
-          setError({
-            name: !patterns.name.test(name),
-            email: !patterns.email.test(email),
-            password: !patterns.loginPassword.test(password)
-          });
+          setForm({
+            ...form,
+            error: {
+              name: !patterns.name.test(form.name),
+              email: !patterns.email.test(form.email),
+              password: !patterns.loginPassword.test(form.password)
+            }
+          })
         };
 
       };
@@ -72,11 +84,11 @@ const AuthContextProvider = (props) => {
       // handle register API call
       if (buttonAction === "REGISTER") {
         if ( //if passes regex tests
-          patterns.name.test(name) &&
-          patterns.email.test(email) &&
-          patterns.password.test(password)
+          patterns.name.test(form.name) &&
+          patterns.email.test(form.email) &&
+          patterns.password.test(form.password)
         ) {
-          register(name, email, password) // register api call to server
+          register(form.name, form.email, form.password) // register api call to server
             .then(() => {
               //enable animated loading view
               loggedin("loading");
@@ -85,15 +97,20 @@ const AuthContextProvider = (props) => {
               setTimeout(() => {
                 //disable animated loading view
                 loggedin(true);
-                setName('');
-                setEmail('');
-                setPassword('');
-                setError({ ...error, name: false, email: false, password: false });
+                setForm({
+                  name: '',
+                  email: '',
+                  password: '',
+                  error: { name: false, email: false, password: false }
+                });
               }, 8000);
             })
             .catch((e) => {
               loggedin(false);
-              setError({ ...error, name: false, email: false, password: false });
+              setForm({
+                ...form,
+                error: { name: false, email: false, password: false }
+              })
               Alert.alert(
                 "",
                 e.response.data.message,
@@ -110,11 +127,14 @@ const AuthContextProvider = (props) => {
         else {
           // if didn't pass regex tests change error values to display error
           // and prevent form from submitting
-          setError({
-            name: !patterns.name.test(name),
-            email: !patterns.email.test(email),
-            password: !patterns.password.test(password)
-          });
+          setForm({
+            ...form,
+            error: {
+              name: !patterns.name.test(form.name),
+              email: !patterns.email.test(form.email),
+              password: !patterns.password.test(form.password)
+            }
+          })
         };
       };
     };
@@ -124,14 +144,8 @@ const AuthContextProvider = (props) => {
   return (
     <AuthContext.Provider value={
       {
-        name,
-        email,
-        password,
-        error,
-        setName,
-        setEmail,
-        setPassword,
-        setError,
+        form,
+        setForm,
         authHelperFunction,
       }}>
       {props.children}
