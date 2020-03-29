@@ -132,7 +132,7 @@ const AuthContextProvider = (props) => {
         setEmail,
         setPassword,
         setError,
-        authHelperFunction
+        authHelperFunction,
       }}>
       {props.children}
     </AuthContext.Provider>
