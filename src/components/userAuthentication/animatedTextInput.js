@@ -13,15 +13,7 @@ const { height, width } = Dimensions.get('window');
 const AnimatedTextInput = (props) => {
 
   //destructure values from the auth context
-  const {
-    name,
-    email,
-    password,
-    error,
-    setName,
-    setEmail,
-    setPassword,
-    authHelperFunction } = useContext(AuthContext);
+  const { form, setForm, authHelperFunction } = useContext(AuthContext);
 
   return (
     <Animated.View style={{
@@ -33,42 +25,26 @@ const AnimatedTextInput = (props) => {
       top: null,
       justifyContent: 'center'
     }}>
+
       <TapGestureHandler onHandlerStateChange={props.onCloseX} >
         <Animated.View style={styles.closeButton} >
           <Text style={{ fontSize: 15 }}>X</Text>
         </Animated.View>
       </TapGestureHandler>
-      <Animated.View style={styles.scrollView}>
-        <Content enableAutomaticScroll={false}>
-          {props.buttonAction === "REGISTER" && (
-            <RegisterForm
-              name={name}
-              email={email}
-              password={password}
-              error={error}
-              setName={setName}
-              setEmail={setEmail}
-              setPassword={setPassword}>
-            </RegisterForm>
-          )}
-          {props.buttonAction === "SIGN IN" && (
-            <LoginForm
-              email={email}
-              password={password}
-              error={error}
-              setEmail={setEmail}
-              setPassword={setPassword}>
-            </LoginForm>)}
-        </Content>
-      </Animated.View>
 
-      <TapGestureHandler
-        onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}
-      >
-        <Animated.View style={styles.button}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
-        </Animated.View>
-      </TapGestureHandler>
+      <Animated.View style={styles.formContentView}>
+        <Content enableAutomaticScroll={false}>
+          {props.buttonAction === "REGISTER" &&
+            <RegisterForm form={form} setForm={setForm} />}
+          {props.buttonAction === "SIGN IN" &&
+            <LoginForm form={form} setForm={setForm} />}
+        </Content>
+        <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}>
+          <Animated.View style={styles.button}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
+          </Animated.View>
+        </TapGestureHandler>
+      </Animated.View>
     </Animated.View>
   )
 };
@@ -101,8 +77,8 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOpacity: 0.2,
   },
-  scrollView: {
-    height: 160
+  formContentView: {
+    height: height / 3.5
   }
 });
 
