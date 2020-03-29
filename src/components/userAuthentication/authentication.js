@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import Animated, { Easing } from 'react-native-reanimated';
+import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import AnimatedTextInput from './animatedTextInput';
+import { AuthContext } from '../../contexts/authContext';
 import {
   View,
   Text,
@@ -8,11 +12,8 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
-import Animated, { Easing } from 'react-native-reanimated';
-import { TapGestureHandler, State } from 'react-native-gesture-handler';
-import AnimatedTextInput from './animatedTextInput';
 
 const { width, height } = Dimensions.get('window');
 const {
@@ -29,8 +30,11 @@ const {
   timing,
   clockRunning,
   interpolate,
-  Extrapolate
+  Extrapolate,
+  call
 } = Animated;
+
+const buttonOpacity = new Value(1);
 
 const runTiming = (clock, value, dest) => {
   const state = {
@@ -59,63 +63,82 @@ const runTiming = (clock, value, dest) => {
     cond(state.finished, debug('stop clock', stopClock(clock))),
     state.position
   ]);
-}
-const buttonOpacity = new Value(1);
-
-const onStateChange = event([
-  {
-    nativeEvent: ({ state }) =>
-      block([
-        cond(
-          eq(state, State.END),
-          set(buttonOpacity, runTiming(new Clock(), 1, 0)),
-        )
-      ])
-  }
-]);
-
-const onCloseX = event([
-  {
-    nativeEvent: ({ state }) =>
-      block([
-        cond(
-          eq(state, State.END),
-          set(buttonOpacity, runTiming(new Clock(), 0, 1))
-        )
-      ])
-  }
-]);
-
-const buttonY = interpolate(buttonOpacity, {
-  inputRange: [0, 1],
-  outputRange: [100, 0],
-  extrapolate: Extrapolate.CLAMP
-});
-const bgY = interpolate(buttonOpacity, {
-  inputRange: [0, 1],
-  outputRange: [-height / 3, 0],
-  extrapolate: Extrapolate.CLAMP
-});
-const textInputZindex = interpolate(buttonOpacity, {
-  inputRange: [0, 1],
-  outputRange: [1, -1],
-  extrapolate: Extrapolate.CLAMP
-});
-const textInputY = interpolate(buttonOpacity, {
-  inputRange: [0, 1],
-  outputRange: [0, 100],
-  extrapolate: Extrapolate.CLAMP
-});
-const textInputOpacity = interpolate(buttonOpacity, {
-  inputRange: [0, 1],
-  outputRange: [1, 0],
-  extrapolate: Extrapolate.CLAMP
-});
+};
 
 
-const Auth = () => {
+const Authentication = () => {
 
+  const {
+    error,
+    setName,
+    setEmail,
+    setPassword,
+    setError } = useContext(AuthContext);
   const [buttonAction, setButtonAction] = useState('');
+
+  const onStateChange = event([
+    {
+      nativeEvent: ({ state }) =>
+        block([
+          cond(
+            eq(state, State.END),
+            set(buttonOpacity, runTiming(new Clock(), 1, 0)),
+          )
+        ])
+    }
+  ]);
+
+  const onCloseX = event([{
+    nativeEvent: {
+      state: state =>
+        block([
+          cond(
+            eq(state, State.END),
+            set(buttonOpacity, runTiming(new Clock(), 0, 1))
+          ),
+          cond(
+            eq(buttonOpacity, 1),
+            call(
+              [state],
+              () => {
+                //clear form and dismiss keyboard if close the form view
+                setName('')
+                setEmail('')
+                setPassword('')
+                setError({ ...error, name: false, email: false, password: false })
+                Keyboard.dismiss()
+              }
+            )
+          )
+        ])
+    }
+  }]);
+
+  const buttonY = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [100, 0],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const bgY = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [-height / 3, 0],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const textInputZindex = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [1, -1],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const textInputY = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [0, 100],
+    extrapolate: Extrapolate.CLAMP
+  });
+  const textInputOpacity = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP
+  });
 
   return (
     <KeyboardAvoidingView
@@ -141,8 +164,7 @@ const Auth = () => {
           </Animated.View>
         </TouchableWithoutFeedback>
         <View style={{ height: height / 3, justifyContent: 'center' }}>
-          <TapGestureHandler onHandlerStateChange={onStateChange} >
-
+          <TapGestureHandler onHandlerStateChange={onStateChange}>
             <Animated.View
               style={{
                 ...styles.button,
@@ -152,7 +174,8 @@ const Auth = () => {
             >
               <TouchableOpacity
                 style={styles.touchableOpacity}
-                onPress={() => setButtonAction('SIGN IN')}>
+                onPress={() => setButtonAction('SIGN IN')}
+              >
                 <Text
                   style={{ fontSize: 20, fontWeight: 'bold' }}
                 >SIGN IN</Text>
@@ -218,4 +241,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Auth;
+export default Authentication;
