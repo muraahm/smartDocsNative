@@ -4,35 +4,41 @@ import { Form, Input, Item, Text } from 'native-base';
 
 const LoginForm = (props) => {
 
+  const form = props.form;
+  const email = props.form.email;
+  const password = props.form.password;
+  const emailError = props.form.error.email;
+  const passwordError = props.form.error.password;
+
   return (
     <Form style={styles.form}>
-      <Item error={props.error.email}>
+      <Item error={emailError}>
         <Input
           placeholder="EMAIL"
           placeholderTextColor="black"
           keyboardType="email-address"
-          onChangeText={email => props.setEmail(email)}
+          onChangeText={email => props.setForm({ ...form, email })}
           autoCompleteType="email"
           textContentType="emailAddress"
           clearButtonMode="always"
-          value={props.email}
+          value={email}
         />
       </Item>
-      {props.error.email ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
-      <Item error={props.error.password}>
+      {emailError ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
+      <Item error={passwordError}>
         <Input
           placeholder="PASSWORD"
           placeholderTextColor="black"
           keyboardType="ascii-capable"
-          onChangeText={password => props.setPassword(password)}
+          onChangeText={password => props.setForm({ ...form, password })}
           autoCompleteType="password"
           textContentType="password"
           secureTextEntry={true}
           clearButtonMode="always"
-          value={props.password}
+          value={password}
         />
       </Item>
-      {props.error.password ? <Text style={styles.error}>Password field cannot be empty*</Text> : <Text />}
+      {passwordError ? <Text style={styles.error}>Password field cannot be empty*</Text> : <Text />}
     </Form>
   );
 }
