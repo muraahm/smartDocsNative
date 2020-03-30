@@ -2,23 +2,20 @@ import React, { useState, useContext } from 'react';
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import AnimatedTextInput from './animatedTextInput';
-import { AuthContext } from '../../contexts/authContext';
+import { AuthContext } from '../../contexts/authContext/authCtx';
 import {
-  View,
   Text,
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 const {
   Value,
-  event,
   block,
   cond,
   eq,
@@ -31,11 +28,10 @@ const {
   clockRunning,
   interpolate,
   Extrapolate,
-  call
+  useCode
 } = Animated;
 
 const buttonOpacity = new Value(1);
-
 const runTiming = (clock, value, dest) => {
   const state = {
     finished: new Value(0),
@@ -64,18 +60,6 @@ const runTiming = (clock, value, dest) => {
     state.position
   ]);
 };
-
-const onStateChange = event([
-  {
-    nativeEvent: ({ state }) =>
-      block([
-        cond(
-          eq(state, State.END),
-          set(buttonOpacity, runTiming(new Clock(), 1, 0)),
-        )
-      ])
-  }
-]);
 
 const buttonY = interpolate(buttonOpacity, {
   inputRange: [0, 1],
@@ -106,43 +90,30 @@ const textInputOpacity = interpolate(buttonOpacity, {
 
 const Authentication = () => {
 
-  const { setForm } = useContext(AuthContext);
+  const { onOpenX, form } = useContext(AuthContext);
   const [buttonAction, setButtonAction] = useState('');
 
-  const onCloseX = event([{
-    nativeEvent: {
-      state: state =>
-        block([
-          cond(
-            eq(state, State.END),
-            set(buttonOpacity, runTiming(new Clock(), 0, 1))
-          ),
-          cond(
-            eq(buttonOpacity, 1),
-            call(
-              [state],
-              () => {
-                //clear form and dismiss keyboard if close the form view
-                setForm({
-                  name: '',
-                  email: '',
-                  password: '',
-                  error: { name: false, email: false, password: false }
-                })
-                Keyboard.dismiss()
-              }
-            )
-          )
-        ])
-    }
-  }]);
+  useCode(
+    () => (
+      block([
+        cond(
+          eq(form.closeX, State.END),
+          set(buttonOpacity, runTiming(new Clock(), 0, 1))
+        ),
+        cond(
+          eq(form.openX, State.END),
+          set(buttonOpacity, runTiming(new Clock(), 1, 0)),
+        )
+      ])
+    ), [form.closeX, form.openX]
+  );
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : null}
       style={{ flex: 1 }}
     >
-      <View style={{
+      <Animated.View style={{
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'flex-end'
@@ -160,53 +131,44 @@ const Authentication = () => {
             />
           </Animated.View>
         </TouchableWithoutFeedback>
-        <View style={{ height: height / 3, justifyContent: 'center' }}>
-          <TapGestureHandler onHandlerStateChange={onStateChange}>
-            <Animated.View
-              style={{
-                ...styles.button,
-                opacity: buttonOpacity,
-                transform: [{ translateY: buttonY }]
-              }}
-            >
-              <TouchableOpacity
-                style={styles.touchableOpacity}
-                onPress={() => setButtonAction('SIGN IN')}
-              >
-                <Text
-                  style={{ fontSize: 20, fontWeight: 'bold' }}
-                >SIGN IN</Text>
-              </TouchableOpacity>
-            </Animated.View>
 
-          </TapGestureHandler>
-          <TapGestureHandler onHandlerStateChange={onStateChange}>
-            <Animated.View
-              style={{
-                ...styles.button,
-                backgroundColor: 'black',
-                opacity: buttonOpacity,
-                transform: [{ translateY: buttonY }]
-              }}
+        <Animated.View style={{ height: height / 3, justifyContent: 'center' }}>
+          <TapGestureHandler onHandlerStateChange={(e) => {
+            onOpenX(e.nativeEvent.state), setButtonAction('SIGN IN')
+          }}>
+            <Animated.View style={{
+              ...styles.button, opacity: buttonOpacity,
+              transform: [{ translateY: buttonY }]
+            }}
             >
-              <TouchableOpacity
-                style={styles.touchableOpacity}
-                onPress={() => setButtonAction('REGISTER')}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
-                  REGISTER
-            </Text>
-              </TouchableOpacity>
+              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                SIGN IN</Text>
             </Animated.View>
           </TapGestureHandler>
+
+          <TapGestureHandler onHandlerStateChange={(e) => {
+            onOpenX(e.nativeEvent.state), setButtonAction('REGISTER')
+          }}>
+            <Animated.View style={{
+              ...styles.button,
+              backgroundColor: 'black',
+              opacity: buttonOpacity,
+              transform: [{ translateY: buttonY }]
+            }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+                REGISTER</Text>
+            </Animated.View>
+          </TapGestureHandler>
+
           <AnimatedTextInput
             textInputZindex={textInputZindex}
             textInputY={textInputY}
             textInputOpacity={textInputOpacity}
-            onCloseX={onCloseX}
             buttonAction={buttonAction}
           />
-        </View>
-      </View>
+        </Animated.View>
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 };
@@ -229,13 +191,6 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOpacity: 0.2,
   },
-  touchableOpacity: {
-    height: 60,
-    width: width - 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
 });
 
 export default Authentication;
