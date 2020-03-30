@@ -1,4 +1,5 @@
 import { Alert } from 'react-native';
+import { State } from 'react-native-gesture-handler';
 
 // regex patterns
 const patterns = {
