@@ -15,8 +15,8 @@ function reducer(state, action) {
     case SET_USER_CATEGORIES:
       return { ...state, userCategories: action.value }
 
-      case SET_USER_RECIEPTS:
-        return { ...state, userReciepts: action.value}
+    case SET_USER_RECIEPTS:
+      return { ...state, userReciepts: action.value }
 
     case SET_ACCOUNTANTS:
       return { ...state, accountants: action.value }
@@ -28,7 +28,7 @@ function reducer(state, action) {
         userCategories: action.value.userCategories,
         accountants: action.value.accountants
       }
-      case LOGGEDIN:
+    case LOGGEDIN:
       return { ...state, loggedin: action.value }
 
 
