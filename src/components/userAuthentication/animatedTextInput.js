@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Text, Content } from 'native-base';
-import { AuthContext } from '../../contexts/authContext';
+import { AuthContext } from '../../contexts/authContext/authCtx';
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
 
@@ -13,7 +13,7 @@ const { height, width } = Dimensions.get('window');
 const AnimatedTextInput = (props) => {
 
   //destructure values from the auth context
-  const { authHelperFunction } = useContext(AuthContext);
+  const { authentication, onCloseX } = useContext(AuthContext);
 
   return (
     <Animated.View style={{
@@ -26,7 +26,7 @@ const AnimatedTextInput = (props) => {
       justifyContent: 'center'
     }}>
 
-      <TapGestureHandler onHandlerStateChange={props.onCloseX} >
+      <TapGestureHandler onHandlerStateChange={(e) => onCloseX(e.nativeEvent.state)} >
         <Animated.View style={styles.closeButton} >
           <Text style={{ fontSize: 15 }}>X</Text>
         </Animated.View>
@@ -37,7 +37,7 @@ const AnimatedTextInput = (props) => {
           {props.buttonAction === "REGISTER" && <RegisterForm />}
           {props.buttonAction === "SIGN IN" && <LoginForm />}
         </Content>
-        <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authHelperFunction(nativeEvent, props.buttonAction)}>
+        <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authentication(nativeEvent, props.buttonAction)}>
           <Animated.View style={styles.button}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
           </Animated.View>
