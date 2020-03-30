@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Header, Left, Body, Right, Button, Icon, Title, Text } from 'native-base';
-import { AppContext } from '../contexts/appContext';
+import { AppContext } from '../contexts/appContext/appCtx';
 
 
 const AppHeader = ({ title, navigation }) => {

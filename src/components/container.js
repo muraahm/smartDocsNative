@@ -3,7 +3,7 @@ import Navigator from '../routes/drawer';
 import { Container } from 'native-base';
 import Authentication from '../components/userAuthentication/authentication';
 import Loading from '../components/userAuthentication/loading'
-import { AppContext } from '../contexts/appContext'
+import { AppContext } from '../contexts/appContext/appCtx'
 
 
 const AppContainer = () => {
