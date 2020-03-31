@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Animated from 'react-native-reanimated';
 import { TapGestureHandler } from 'react-native-gesture-handler';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Keyboard } from 'react-native';
 import { Text, Content } from 'native-base';
 import { AuthContext } from '../../contexts/authContext/authCtx';
 import LoginForm from './loginForm';
@@ -37,7 +37,10 @@ const AnimatedTextInput = (props) => {
           {props.buttonAction === "REGISTER" && <RegisterForm />}
           {props.buttonAction === "SIGN IN" && <LoginForm />}
         </Content>
-        <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => authentication(nativeEvent, props.buttonAction)}>
+        <TapGestureHandler onHandlerStateChange={({ nativeEvent }) => {
+          Keyboard.dismiss();
+          authentication(nativeEvent, props.buttonAction)
+          }}>
           <Animated.View style={styles.button}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.buttonAction}</Text>
           </Animated.View>
