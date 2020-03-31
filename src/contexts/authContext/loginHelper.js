@@ -1,4 +1,4 @@
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 
 // regex patterns
 const patterns = {
@@ -9,13 +9,14 @@ const patterns = {
 };
 
 const loginHelper = async (form, setForm, login, loggedin) => {
+
   if ( //if passes regex tests
     patterns.email.test(form.email) &&
     patterns.loginPassword.test(form.password)) {
     try {
       await login(form.email, form.password)
-      await loggedin("loading"); //enable animated loading view
-      await setTimeout(() => {
+      loggedin("loading"); //enable animated loading view
+      setTimeout(() => {
         loggedin(true); //disable animated loading view
         setForm({ // empty form and close animation
           name: '',

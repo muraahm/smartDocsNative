@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import AnimatedTextInput from './animatedTextInput';
@@ -11,6 +11,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  View,
+  ScrollView
 } from 'react-native';
 
 const { height } = Dimensions.get('window');
@@ -107,6 +109,8 @@ const Authentication = () => {
       ])
     ), [form.closeX, form.openX]
   );
+
+
 
   return (
     <KeyboardAvoidingView

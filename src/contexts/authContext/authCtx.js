@@ -20,15 +20,15 @@ const AuthContextProvider = (props) => {
     closeX: ''
   });
 
-  const authentication = async (nativeEvent, buttonAction) => {
+  const authentication = (nativeEvent, buttonAction) => {
     //handle login API call to server
     if (nativeEvent.state === State.END && buttonAction === "SIGN IN") {
-      await loginHelper(form, setForm, login, loggedin);
+      loginHelper(form, setForm, login, loggedin);
     };
 
     // handle register API call to server
     if (nativeEvent.state === State.END && buttonAction === "REGISTER") {
-      await registerHelper(form, setForm, register, loggedin);
+      registerHelper(form, setForm, register, loggedin);
     };
   };
 
