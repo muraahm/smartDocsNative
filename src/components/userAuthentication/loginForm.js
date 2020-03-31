@@ -23,6 +23,7 @@ const LoginForm = () => {
           textContentType="emailAddress"
           clearButtonMode="always"
           value={email}
+          returnKeyType="done"
         />
       </Item>
       {emailError ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
@@ -37,6 +38,7 @@ const LoginForm = () => {
           secureTextEntry={true}
           clearButtonMode="always"
           value={password}
+          returnKeyType="done"
         />
       </Item>
       {passwordError ? <Text style={styles.error}>Password field cannot be empty*</Text> : <Text />}

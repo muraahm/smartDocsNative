@@ -26,6 +26,7 @@ const RegisterForm = () => {
           textContentType="name"
           clearButtonMode="always"
           value={name}
+          returnKeyType="done"
         />
       </Item>
       {nameError ? <Text style={styles.error}>Name field cannot be empty*</Text> : <Text />}
@@ -39,6 +40,7 @@ const RegisterForm = () => {
           textContentType="emailAddress"
           clearButtonMode="always"
           value={email}
+          returnKeyType="done"
         />
       </Item>
       {emailError ? <Text style={styles.error}>Email must be a valid address*</Text> : <Text />}
@@ -53,6 +55,7 @@ const RegisterForm = () => {
           secureTextEntry={true}
           clearButtonMode="always"
           value={password}
+          returnKeyType="done"
         />
       </Item>
       {passwordError ? <Text style={styles.error}>Password must alphanumeric (@, _ and - are also allowed) and be 8 - 20 characters*</Text> : <Text />}
