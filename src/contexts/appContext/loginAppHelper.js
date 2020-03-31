@@ -17,7 +17,6 @@ const loginAppHelper = async (email, password, dispatch) => {
   //dispatch client info to the reducer
   dispatch({ type: SET_USER_INFO, value: userInfo });
   AsyncStorage.setItem('token', userData.data.token);
-  console.log('userData', userData.data)
 
   //grab all available categories
   const userCategoriesData = await axios.get(
