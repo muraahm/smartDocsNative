@@ -1,12 +1,27 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-// import { Header, Left, Body, Right, Title, Button, Icon } from 'native-base';
+import { Container, Header, Content, Footer, FooterTab, Button, Text } from 'native-base';
 
 const About = () => {
   return (
-    <View>
-      <Text>About Screen</Text>
-    </View>
+    <Container>
+        <Content />
+        <Footer>
+          <FooterTab>
+            <Button>
+              <Text>Categories</Text>
+            </Button>
+            <Button>
+              <Text>Camera</Text>
+            </Button>
+            <Button active>
+              <Text>Navigate</Text>
+            </Button>
+            <Button>
+              <Text>Contact</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      </Container>
   );
 };
 
