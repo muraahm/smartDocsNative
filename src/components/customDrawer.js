@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, ScrollView, Avatar, Text, TouchableHighlight, StyleSheet } from 'react-native'
+import { View, ScrollView, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import { DrawerItems } from 'react-navigation-drawer';
 import { Icon } from 'native-base';
 import { SafeAreaView } from 'react-navigation';
