@@ -1,21 +1,17 @@
-import React, { useContext } from 'react';
-import { StyleSheet, ImageBackground, View } from 'react-native';
-import { Header, Left, Body, Right, Button, Icon, Title, Text } from 'native-base';
-import { AppContext } from '../contexts/appContext/appCtx';
-
+import React from 'react';
+import { StyleSheet, ImageBackground } from 'react-native';
+import { Left, Body, Right, Button, Icon, Title } from 'native-base';
 
 const AppHeader = ({ title, navigation }) => {
   const openMenu = () => {
     navigation.openDrawer();
   };
 
-  const { logout } = useContext(AppContext)
-
   return (
     <ImageBackground
       style={styles.container}
-      imageStyle={{ borderRadius: 20, borderWidth: 1, }}
-      source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQcfV5XPJpZG47SS_j1WaUc77gdgtDWELK-zrb5H_GN90zHgKhx&usqp=CAU' }}
+      imageStyle={{ borderRadius: 20, borderWidth: 1, opacity: 0.5 }}
+      source={require('../assets/login.png')}
     >
       <Left>
         <Button transparent>
@@ -25,11 +21,7 @@ const AppHeader = ({ title, navigation }) => {
       <Body>
         <Title style={styles.headerTitile}>{title}</Title>
       </Body>
-      <Right>
-        <Button transparent>
-          <Icon name="exit" onPress={logout} style={styles.logout} />
-        </Button>
-      </Right>
+      <Right />
     </ ImageBackground>
   );
 };
@@ -49,15 +41,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
   },
   headerTitile: {
-    fontSize: 25,
+    fontSize: 30,
     fontFamily: 'Iowan Old Style',
     shadowColor: 'black',
-    color: 'red'
+    color: '#e91e63',
 
-  },
-  logout: {
-    color: 'black',
-    fontSize: 40,
   },
   menu: {
     color: 'black',
